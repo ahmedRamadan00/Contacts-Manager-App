@@ -1,3 +1,2 @@
 # Contact-Manager
-contacts management application using python
-This project is written in Python as an application on ().
+This project is written in Python as an application on functions and file handling.
