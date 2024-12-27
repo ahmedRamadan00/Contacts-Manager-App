@@ -1,90 +1,97 @@
+import json
+
+def loadContacts():
+    try:
+        with open("contacts.json" , "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        return []
+
+def saveContacts(contacts):
+    with open("contacts.json", "w") as file:
+        json.dump(contacts, file, indent=4)
+
+
+
 def addContact():
     name = input("Enter the name: ")
     phone = input("Enter the phone: ")
     email = input("Enter the email: ")
 
-    with open("contacts.txt", "a") as file:
-        if "@" not in email or "." not in email:
-            print("Invalid Email")
-        else:
-            file.write(name + " " + phone + " " + email + "\n")
-            print("Contact Added Successfully")
+    if "@" not in email or "." not in email:
+        print("Invalid email address.")
+        return
+
+    contacts = loadContacts()
+
+    for contact in contacts:
+        if contact["name"] == name:
+            print("Contact with this name already exists.")
+            return
+    new_contact = {"name": name,
+                   "phone": phone,
+                   "email": email}
+    contacts.append(new_contact)
+    saveContacts(contacts)
+    print("Contact added successfully.")
 
 
 def editContact():
     name = input("Enter the name of the contact you want to edit: ")
     new_phone = input("Enter the new phone (leave blank to skip): ")
-    if new_phone == "":
-        new_phone = None
-
     new_email = input("Enter the new email (leave blank to skip): ")
-    if new_email == "":
-        new_email = None
 
-    with open("contacts.txt", "r") as file:
-        contacts = file.readlines()
+    contacts = loadContacts()
+    contactFound = False
 
-    with open("contacts.txt", "w") as file:
-        contact_found = False
-        for contact in contacts:
-            contact_details = contact.strip().split(" ")
-            if contact_details[0] == name:
-                contact_found = True
-                if new_phone:
-                    contact_details[1] = new_phone
-                if new_email:
-                    contact_details[2] = new_email
-
-                file.write(" ".join(contact_details) + "\n")
-            else:
-                file.write(contact)
-
-        if contact_found:
-            print("Contact updated successfully.")
-        else:
+    for contact in contacts:
+        if contact["name"] == name:
+            contactFound = True
+            if new_phone:
+                contact["phone"] = new_phone
+                print("Phone updated successfully.")
+            if new_email:
+                contact["email"] = new_email
+                print("Email updated successfully.")
+            saveContacts(contacts)
+            break
+    if not contactFound:
             print("Contact not found.")
 
 
 def showContacts():
-    with open("contacts.txt", "r") as file:
-        contacts = file.readlines()
+    contacts = loadContacts()
     for contact in contacts:
-        print(contact.strip())
+        print(contact)
 
 
 def deleteContact():
     name = input("Enter the name of the contact you want to delete: ")
-    with open("contacts.txt", "r") as file:
-        contacts = file.readlines()
+    contacts = loadContacts()
+    contactFound = False
 
-    with open("contacts.txt", "w") as file:
-        contact_found = False
-        for contact in contacts:
-            contact_details = contact.strip().split(" ")
-            if contact_details[0] == name:
-                contact_found = True
-                print(f"Contact {name} deleted successfully.")
-                continue
-            else:
-                file.write(contact)
+    for contact in contacts :
+        if contact["name"] == name:
+            contacts.remove(contact)
+            saveContacts(contacts)
+            print("Contact deleted successfully.")
+            contactFound = True
+            break
 
-        if not contact_found:
-            print(f"Contact {name} not found.")
+    if not contactFound :
+        print("Contact not found.")
 
 
 def searchContact():
     name = input("Enter the name you want to search: ")
-    with open("contacts.txt", "r") as file:
-        contacts = file.readlines()
-
+    contacts = loadContacts()
     contact_found = False
+
     for contact in contacts:
-        contact_details = contact.strip().split(" ")
-        if contact_details[0] == name:
-            print(contact_details)
+        if contact["name"] == name:
+            print(contact)
             contact_found = True
             break
-
     if not contact_found:
         print("Contact not found.")
 
