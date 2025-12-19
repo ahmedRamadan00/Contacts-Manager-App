@@ -73,25 +73,12 @@ Follow the on-screen instructions.
 Choose an option: 1
 Enter the name: Ahmed
 Enter the phone: 0123456789
-Enter the email: ahmed@gmail.com
+Enter the email: 
 Contact added successfully.
-💡 Notes
-If contacts.json does not exist, it will be automatically created.
 
-Email addresses must include @ and . to be valid.
-
-Duplicate contact names are not allowed — each name must be unique.
-
-🚀 Future Improvements
-Here are some possible upgrades you could add:
-
-Develop a Graphical User Interface (GUI) using Tkinter or PyQt.
-
-Support multiple contact lists or categories.
-
-Add CSV export/import functionality.
 
 Implement advanced validation for phone numbers and emails.
 
 Add sorting and filtering options for contacts.
+
 
